@@ -1,2 +1,980 @@
 @import "tailwindcss";
 :root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#f7f8fc;color:#101828}body{margin:0}.glass{background:rgba(255,255,255,.8);backdrop-filter:blur(14px);border:1px solid #eaecf0}.gradient{background:linear-gradient(135deg,#111827 0%,#293056 55%,#5b3cc4 100%)}.card{background:#fff;border:1px solid #eaecf0;border-radius:18px;box-shadow:0 8px 30px rgba(16,24,40,.05)}
+
+/* ===== StartupPilot visibility fixes ===== */
+
+.gradient .glass {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.gradient .glass:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.gradient .glass .text-white\/60 {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.gradient .glass .text-white\/75 {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+/* Landing page primary button */
+.gradient .bg-white {
+  color: #111827 !important;
+}
+
+.gradient .bg-white:hover {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+/* Keep dark text readable on normal cards */
+.card {
+  color: #111827;
+}
+
+.card pre {
+  color: #475569 !important;
+}
+
+
+/* =========================================================
+   STARTUPPILOT — EDITORIAL PRODUCT DESIGN
+   ========================================================= */
+
+:root {
+  --sp-bg: #f6f3ed;
+  --sp-paper: #fffdf8;
+  --sp-white: #ffffff;
+  --sp-ink: #181715;
+  --sp-muted: #6f6a61;
+  --sp-border: #e3ded4;
+  --sp-orange: #c65d35;
+  --sp-orange-dark: #a94724;
+  --sp-green: #68745d;
+}
+
+/* ---------- Navbar ---------- */
+
+.site-header {
+  background: rgba(255, 253, 248, 0.94);
+  border-bottom: 1px solid var(--sp-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.site-nav {
+  position: relative;
+}
+
+.brand {
+  color: var(--sp-ink);
+}
+
+.brand-mark {
+  width: 37px;
+  height: 37px;
+  display: grid;
+  place-items: center;
+  background: var(--sp-ink);
+  color: #fff;
+  border-radius: 9px;
+}
+
+.brand-accent {
+  color: var(--sp-orange);
+}
+
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-link {
+  height: 38px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #625e57;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.nav-link:hover {
+  background: #f0ece4;
+  color: var(--sp-ink);
+}
+
+.nav-new {
+  background: var(--sp-ink);
+  color: #fff !important;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.nav-new:hover {
+  background: var(--sp-orange);
+}
+
+.logout-button,
+.login-button {
+  height: 38px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--sp-border);
+  border-radius: 8px;
+  background: transparent;
+  color: #4f4b45;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.logout-button:hover,
+.login-button:hover {
+  background: #f0ece4;
+  color: var(--sp-ink);
+}
+
+.logout-name {
+  color: var(--sp-ink);
+}
+
+/* ---------- Landing background ---------- */
+
+.landing-page {
+  min-height: calc(100vh - 72px);
+  background:
+    radial-gradient(
+      circle at 82% 12%,
+      rgba(198, 93, 53, 0.09),
+      transparent 28%
+    ),
+    var(--sp-bg);
+}
+
+.landing-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--sp-border);
+}
+
+.landing-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(24, 23, 21, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 23, 21, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.hero-grid {
+  position: relative;
+  z-index: 1;
+  min-height: 660px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 90px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.hero-copy {
+  max-width: 650px;
+}
+
+.eyebrow,
+.section-kicker,
+.panel-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  color: var(--sp-orange-dark);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--sp-orange);
+  border-radius: 50%;
+}
+
+.hero-copy h1 {
+  max-width: 650px;
+  margin: 0;
+  font-size: clamp(48px, 6vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  font-weight: 900;
+  color: var(--sp-ink);
+}
+
+.hero-highlight {
+  display: block;
+  color: var(--sp-orange);
+}
+
+.hero-description {
+  max-width: 580px;
+  margin-top: 28px;
+  color: #68635b;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+}
+
+.primary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 18px;
+  background: var(--sp-orange);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 750;
+  box-shadow: 0 8px 24px rgba(198, 93, 53, 0.18);
+}
+
+.primary-cta:hover {
+  background: var(--sp-orange-dark);
+  transform: translateY(-1px);
+}
+
+.secondary-cta {
+  padding: 12px 16px;
+  border: 1px solid #d7d1c7;
+  border-radius: 8px;
+  color: var(--sp-ink);
+  font-size: 14px;
+  font-weight: 650;
+  background: rgba(255,255,255,.45);
+}
+
+.secondary-cta:hover {
+  background: #fff;
+  border-color: #bdb6ab;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 32px;
+  color: #777168;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hero-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-meta svg {
+  color: var(--sp-green);
+}
+
+/* ---------- Agent workflow panel ---------- */
+
+.agent-panel {
+  background: rgba(255, 253, 248, 0.86);
+  border: 1px solid #dcd6cb;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 24px 70px rgba(45, 38, 28, 0.08);
+}
+
+.agent-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 18px;
+}
+
+.panel-title {
+  margin-top: 5px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid #d9e2d4;
+  border-radius: 999px;
+  color: #607056;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+
+.live-indicator span {
+  width: 6px;
+  height: 6px;
+  background: #5f8a4d;
+  border-radius: 50%;
+}
+
+.agent-list {
+  padding: 2px;
+}
+
+.agent-item {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 17px;
+  background: #fff;
+  border: 1px solid #e4dfd6;
+  border-radius: 10px;
+}
+
+.agent-item:hover {
+  border-color: #d0c8bb;
+  box-shadow: 0 8px 22px rgba(40, 34, 25, .05);
+}
+
+.agent-number {
+  min-width: 34px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--sp-orange);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.agent-info {
+  flex: 1;
+}
+
+.agent-name {
+  color: var(--sp-ink);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.agent-desc {
+  margin-top: 4px;
+  color: #7b756c;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.agent-arrow {
+  color: #aaa39a;
+}
+
+.validator-icon {
+  color: var(--sp-green);
+}
+
+.workflow-line {
+  width: 1px;
+  height: 13px;
+  margin-left: 34px;
+  background: #d7d0c5;
+}
+
+/* ---------- Feature section ---------- */
+
+.landing-features {
+  padding: 88px 0 110px;
+  background: #fffdf9;
+}
+
+.feature-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 50px;
+  padding-bottom: 38px;
+  border-bottom: 1px solid var(--sp-border);
+}
+
+.feature-intro h2 {
+  max-width: 580px;
+  margin-top: 10px;
+  color: var(--sp-ink);
+  font-size: 36px;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  font-weight: 850;
+}
+
+.feature-intro p {
+  max-width: 360px;
+  color: #777168;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 1px;
+  background: var(--sp-border);
+  border: 1px solid var(--sp-border);
+}
+
+.feature-card {
+  min-height: 210px;
+  padding: 27px;
+  background: #fffdf9;
+}
+
+.feature-card:hover {
+  background: #faf7f0;
+}
+
+.feature-card-large {
+  grid-column: span 1;
+}
+
+.feature-number {
+  margin-bottom: 55px;
+  color: var(--sp-orange);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.feature-card h3 {
+  color: var(--sp-ink);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.feature-card p {
+  max-width: 320px;
+  margin-top: 9px;
+  color: #777168;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .feature-card-large {
+    grid-column: span 2;
+  }
+
+  .feature-intro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-grid {
+    min-height: auto;
+    padding-top: 55px;
+    padding-bottom: 60px;
+  }
+
+  .hero-copy h1 {
+    font-size: 48px;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primary-cta,
+  .secondary-cta {
+    justify-content: center;
+  }
+
+  .hero-meta {
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card-large {
+    grid-column: span 1;
+  }
+}
+
+/* =========================================================
+   DARK NAVBAR
+   ========================================================= */
+
+.site-header {
+  background: #171717;
+  border-bottom: 1px solid #2d2d2d;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.brand {
+  color: #ffffff;
+}
+
+.brand-mark {
+  background: #ffffff;
+  color: #171717;
+  border: 1px solid #ffffff;
+}
+
+.brand-accent {
+  color: #e06b3f;
+}
+
+.nav-link {
+  color: #a8a8a8;
+}
+
+.nav-link:hover {
+  background: #292929;
+  color: #ffffff;
+}
+
+.nav-new {
+  background: #e06b3f;
+  color: #ffffff !important;
+  border: 1px solid #e06b3f;
+}
+
+.nav-new:hover {
+  background: #c95730;
+  border-color: #c95730;
+}
+
+.logout-button,
+.login-button {
+  color: #d0d0d0;
+  border-color: #3a3a3a;
+  background: #202020;
+}
+
+.logout-button:hover,
+.login-button:hover {
+  background: #2b2b2b;
+  border-color: #4a4a4a;
+  color: #ffffff;
+}
+
+.logout-name {
+  color: #ffffff;
+}
+
+/* Keep navbar readable on all screens */
+.site-header a {
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   DARK APPLICATION WORKSPACE
+   ========================================================= */
+
+/* All application pages except the landing page */
+main > div:not(.landing-page) {
+  min-height: calc(100vh - 72px);
+  background:
+    radial-gradient(
+      circle at 85% 0%,
+      rgba(224, 107, 63, 0.08),
+      transparent 30%
+    ),
+    #101112;
+}
+
+/* Page headings outside cards */
+main > div:not(.landing-page) > h1,
+main > div:not(.landing-page) h1 {
+  color: #f8f7f3;
+}
+
+/* Secondary text outside cards */
+main > div:not(.landing-page) > p {
+  color: #aaa59d;
+}
+
+/* Keep data cards bright and readable */
+main > div:not(.landing-page) .card {
+  background: #fffdf8;
+  border-color: #ded8ce;
+  color: #181715;
+}
+
+/* Card headings */
+main > div:not(.landing-page) .card h2,
+main > div:not(.landing-page) .card h3 {
+  color: #181715;
+}
+
+/* Card body text */
+main > div:not(.landing-page) .card p,
+main > div:not(.landing-page) .card pre {
+  color: #625e57;
+}
+
+/* History / list separators */
+main > div:not(.landing-page) .card .border-b {
+  border-color: #e4dfd6;
+}
+
+/* History item hover */
+main > div:not(.landing-page) .card a:hover {
+  background: #f7f3eb;
+}
+
+/* Empty states */
+main > div:not(.landing-page) .text-slate-500 {
+  color: #777168;
+}
+
+/* Page-level muted text */
+main > div:not(.landing-page) .text-slate-400 {
+  color: #9b958c;
+}
+
+/* Orange page labels */
+main > div:not(.landing-page) .text-violet-600 {
+  color: #e06b3f !important;
+}
+
+/* Profile icon */
+main > div:not(.landing-page) .bg-violet-100 {
+  background: #fff0e9 !important;
+}
+
+main > div:not(.landing-page) .text-violet-600 {
+  color: #d65f36 !important;
+}
+
+/* Keep status badges readable */
+main > div:not(.landing-page) .bg-emerald-50 {
+  background: #eaf7ef;
+}
+
+
+/* =========================================================
+   FORM INPUT READABILITY — NEW ANALYSIS
+   ========================================================= */
+
+textarea,
+input,
+select {
+  color: #f5f5f4 !important;
+  caret-color: #e06b3f;
+}
+
+textarea {
+  background: #171717 !important;
+  border-color: #4a4540 !important;
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: #77736d !important;
+  opacity: 1 !important;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+  color: #ffffff !important;
+  border-color: #e06b3f !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(224, 107, 63, 0.15) !important;
+}
+
+/* Buttons on dark forms */
+button:disabled {
+  opacity: 0.55;
+}
+
+/* New Analysis page helper text */
+main > div:not(.landing-page) .text-slate-500 {
+  color: #9b958c;
+}
+
+/* Keep warning box readable */
+main > div:not(.landing-page) .bg-amber-50 {
+  background: #fff8e7;
+  color: #9a4d16;
+}
+
+
+/* =========================================================
+   LOGIN / REGISTER FORM READABILITY
+   ========================================================= */
+
+main input,
+main textarea,
+main select {
+  color: #181715 !important;
+  background: #fffdf8 !important;
+  caret-color: #c65d35 !important;
+}
+
+main input::placeholder,
+main textarea::placeholder {
+  color: #8a847b !important;
+  opacity: 1 !important;
+}
+
+main input:focus,
+main textarea:focus,
+main select:focus {
+  color: #181715 !important;
+  background: #ffffff !important;
+  border-color: #c65d35 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(198, 93, 53, 0.14) !important;
+}
+
+/* Login / register primary button */
+main button.gradient {
+  background: #c65d35 !important;
+  border-color: #c65d35 !important;
+  color: #ffffff !important;
+}
+
+main button.gradient:hover {
+  background: #a94724 !important;
+  border-color: #a94724 !important;
+}
+
+/* Remove old purple styling from auth links */
+main a.text-violet-600,
+main .text-violet-600 {
+  color: #c65d35 !important;
+}
+
+
+/* =========================================================
+   PROFILE CARD — TEXT CONTRAST FIX
+   ========================================================= */
+
+main .card h1 {
+  color: #181715 !important;
+}
+
+main .card h2,
+main .card h3 {
+  color: #181715 !important;
+}
+
+/* Profile subtitle */
+main .card p {
+  color: #625e57 !important;
+}
+
+/* Profile labels */
+main .card .text-slate-500 {
+  color: #777168 !important;
+}
+
+/* Keep security section green */
+main .card .text-emerald-700 {
+  color: #087443 !important;
+}
+
+main .card .text-emerald-800 {
+  color: #065f3a !important;
+}
+
+
+/* =========================================================
+   CLICKABLE AGENT WORKFLOW
+   ========================================================= */
+
+.agent-item {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.agent-item-selected {
+  border-color: #c65d35 !important;
+  background: #fff8f4 !important;
+  box-shadow: 0 8px 24px rgba(198, 93, 53, 0.10);
+}
+
+.agent-item-selected .agent-name {
+  color: #c65d35;
+}
+
+.agent-item-selected .agent-arrow {
+  color: #c65d35;
+}
+
+.agent-panel-hint {
+  margin-top: 14px;
+  text-align: center;
+  color: #8b847a;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ---------- Agent specification section ---------- */
+
+.agent-specifications {
+  scroll-margin-top: 90px;
+  padding: 90px 0 110px;
+  background: #fffdf9;
+  border-top: 1px solid #e3ded4;
+}
+
+.selected-agent-spec {
+  margin-top: 35px;
+  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #dfd8ce;
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(40, 34, 25, 0.06);
+}
+
+.selected-agent-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #e5dfd6;
+}
+
+.selected-agent-number {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #fff0e9;
+  color: #c65d35;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.selected-agent-header h3 {
+  margin-top: 4px;
+  color: #181715;
+  font-size: 26px;
+  font-weight: 850;
+  letter-spacing: -0.03em;
+}
+
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin-top: 25px;
+  background: #e3ded4;
+  border: 1px solid #e3ded4;
+}
+
+.spec-item {
+  display: flex;
+  gap: 15px;
+  min-height: 95px;
+  padding: 20px;
+  background: #fffdf9;
+}
+
+.spec-item span {
+  color: #c65d35;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.spec-item p {
+  margin: 0;
+  color: #4f4a43;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.spec-back {
+  margin-top: 22px;
+  padding: 10px 14px;
+  border: 1px solid #d9d2c8;
+  border-radius: 8px;
+  background: #fff;
+  color: #4e4942;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.spec-back:hover {
+  background: #f5f1e9;
+  border-color: #c9c1b5;
+}
+
+/* Buttons used as feature cards */
+button.feature-card {
+  width: 100%;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+button.feature-card:hover {
+  background: #faf7f0;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 700px) {
+  .spec-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-agent-spec {
+    padding: 20px;
+  }
+}
+

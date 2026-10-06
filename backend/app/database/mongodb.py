@@ -52,7 +52,10 @@ async def list_runs(user_id: str):
     cursor = runs.find({'user_id': oid(user_id)}).sort('created_at', -1)
     out=[]
     async for doc in cursor:
-        doc['run_id']=str(doc.pop('_id')); out.append(doc)
+        doc['run_id'] = str(doc.pop('_id'))
+        if doc.get('user_id') is not None:
+            doc['user_id'] = str(doc['user_id'])
+        out.append(doc)
     return out
 
 async def delete_run(run_id: str, user_id: str):
