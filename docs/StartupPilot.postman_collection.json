@@ -1,0 +1,14 @@
+{
+  "info": {"name":"StartupPilot AI API","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "variable":[{"key":"baseUrl","value":"http://localhost:8000"},{"key":"token","value":""},{"key":"runId","value":""}],
+  "item":[
+    {"name":"Health","request":{"method":"GET","url":"{{baseUrl}}/api/health"}},
+    {"name":"Register","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"name\":\"Demo User\",\"email\":\"demo@example.com\",\"password\":\"demo-password-123\"}"},"url":"{{baseUrl}}/api/auth/register"}},
+    {"name":"Login","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"email\":\"demo@example.com\",\"password\":\"demo-password-123\"}"},"url":"{{baseUrl}}/api/auth/login"}},
+    {"name":"Current User","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{token}}"}],"url":"{{baseUrl}}/api/auth/me"}},
+    {"name":"Start Analysis","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"startup_idea\":\"AI-powered platform that helps college students find affordable healthy meals near their campus.\"}"},"url":"{{baseUrl}}/api/run"}},
+    {"name":"Get Run","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{token}}"}],"url":"{{baseUrl}}/api/run/{{runId}}"}},
+    {"name":"Get Report","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{token}}"}],"url":"{{baseUrl}}/api/report/{{runId}}"}},
+    {"name":"Download PDF","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{token}}"}],"url":"{{baseUrl}}/api/report/{{runId}}/pdf"}}
+  ]
+}
