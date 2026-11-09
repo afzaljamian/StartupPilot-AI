@@ -30,14 +30,21 @@ function Layout({children}){
           </Link>
 
           <nav className="hidden md:flex items-center gap-1 nav-links">
-            <Link to="/dashboard" className="nav-link">Dashboard</Link>
-            <Link to="/new" className="nav-link nav-new">
-              <Plus size={15}/>
-              New Analysis
-            </Link>
-            <Link to="/history" className="nav-link">History</Link>
-            <Link to="/profile" className="nav-link">Profile</Link>
-          </nav>
+  <Link to="/dashboard" className="nav-link">Dashboard</Link>
+
+  <Link to="/new" className="nav-link nav-new">
+    <Plus size={15}/>
+    New Analysis
+  </Link>
+
+  <Link to="/ml-performance" className="nav-link">
+    <BarChart3 size={15}/>
+    ML Performance
+  </Link>
+
+  <Link to="/history" className="nav-link">History</Link>
+  <Link to="/profile" className="nav-link">Profile</Link>
+</nav>
 
           <div className="flex items-center">
             {me ? (
@@ -357,6 +364,290 @@ function Landing(){
   );
 }
 
+function MLPerformance() {
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  
+  const [analytics, setAnalytics] = useState(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(true);
+  const [analyticsError, setAnalyticsError] = useState('');
+
+  useEffect(() => {
+    api.get('/api/ml/results')
+      .then(res => setResults(res.data.data))
+      .catch(() => setError('Unable to load ML evaluation results.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const fetchAnalytics = () => {
+      api.get('/api/analytics')
+        .then(res => {
+          setAnalytics(res.data);
+          setAnalyticsError('');
+        })
+        .catch(() => {
+          setAnalyticsError('Unable to load live analytics.');
+        })
+        .finally(() => {
+          setAnalyticsLoading(false);
+        });
+    };
+
+    fetchAnalytics();
+
+    const interval = setInterval(fetchAnalytics, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-5 py-16 text-center">
+        Loading ML evaluation results...
+      </div>
+    );
+  }
+
+  if (error || !results) {
+    return (
+      <div className="max-w-7xl mx-auto px-5 py-16">
+        <div className="card p-6 text-red-600">
+          {error || 'No evaluation data available.'}
+        </div>
+      </div>
+    );
+  }
+
+  const best = results.models.find(
+    m => m.model === results.best_model
+  );
+
+  const metrics = [
+    ['Accuracy', best.accuracy * 100],
+    ['F1 Score', best.f1_score * 100],
+    ['ROC-AUC', best.roc_auc * 100],
+    ['Acquired Recall', best.recall * 100]
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-5 py-10">
+
+      <div className="mb-8">
+        <p className="text-[#c65d35] font-bold">
+          MACHINE LEARNING ANALYTICS
+        </p>
+        <h1 className="text-3xl font-black mt-2">
+          ML Performance Dashboard
+        </h1>
+        <p className="text-slate-500 mt-2">
+          Historical startup outcome classification and model evaluation.
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-5 mb-8">
+        {[
+          ['Dataset Records', results.total_records],
+          ['Training Records', results.training_records],
+          ['Testing Records', results.testing_records]
+        ].map(([label, value]) => (
+          <div className="card p-6" key={label}>
+            <p className="text-sm text-slate-500">{label}</p>
+            <h2 className="text-3xl font-black mt-2">{value}</h2>
+          </div>
+        ))}
+      </div>
+
+            {/* LIVE STARTUP ANALYTICS */}
+            <div className="mb-8">
+        <div className="mb-5">
+          <p className="text-[#c65d35] font-bold">
+            LIVE STARTUP ANALYTICS
+          </p>
+          <h2 className="text-2xl font-black mt-2">
+            Your Startup Activity
+          </h2>
+          <p className="text-slate-500 mt-1">
+            Real-time overview of your startup analyses.
+          </p>
+        </div>
+
+        {analyticsLoading ? (
+          <p className="text-slate-500">Loading startup analytics...</p>
+        ) : analyticsError ? (
+          <p className="text-red-600">{analyticsError}</p>
+        ) : analytics && (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+              {[
+                ['Total Analyses', analytics.total],
+                ['Completed', analytics.completed],
+                ['Failed', analytics.failed],
+                ['Running', analytics.running],
+                ['Queued', analytics.queued]
+              ].map(([label, value]) => (
+                <div className="card p-5" key={label}>
+                  <p className="text-sm text-slate-500">{label}</p>
+                  <h3 className="text-3xl font-black mt-2">{value}</h3>
+                </div>
+              ))}
+            </div>
+
+            <div className="card p-6">
+              <h3 className="text-lg font-bold mb-4">
+                Recent Startup Analyses
+              </h3>
+
+              {analytics.recent.length > 0 ? (
+                <div className="space-y-3">
+                  {analytics.recent.map(item => (
+                    <Link
+                      to={`/analysis/${item.run_id}`}
+                      key={item.run_id}
+                      className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b last:border-0 pb-3"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-semibold line-clamp-1">
+                          {item.startup_idea || 'Untitled startup'}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          {item.created_at
+                            ? new Date(item.created_at).toLocaleString()
+                            : 'Date unavailable'}
+                        </p>
+                      </div>
+
+                      <Status status={item.status} />
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-slate-500 py-5 text-center">
+                  No startup analyses found yet.
+                </p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="card p-6 mb-8">
+        <p className="text-sm text-slate-500">Selected model in this experiment</p>
+        <h2 className="text-2xl font-black mt-1">{best.model}</h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-6">
+          {metrics.map(([label, value]) => (
+            <div key={label}>
+              <p className="text-sm text-slate-500">{label}</p>
+              <p className="text-2xl font-black mt-1">
+                {(value).toFixed(2)}%
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="card p-6 mb-8">
+        <h2 className="text-xl font-bold mb-5">Model Comparison</h2>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b text-slate-500">
+                <th className="py-3">Model</th>
+                <th>Accuracy</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1 Score</th>
+                <th>ROC-AUC</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.models.map(model => (
+                <tr key={model.model} className="border-b last:border-0">
+                  <td className="py-4 font-semibold">
+                    {model.model}
+                    {model.model === results.best_model && (
+                      <span className="ml-2 text-xs text-emerald-700">
+                        Best
+                      </span>
+                    )}
+                  </td>
+                  <td>{(model.accuracy * 100).toFixed(2)}%</td>
+                  <td>{(model.precision * 100).toFixed(2)}%</td>
+                  <td>{(model.recall * 100).toFixed(2)}%</td>
+                  <td>{(model.f1_score * 100).toFixed(2)}%</td>
+                  <td>{(model.roc_auc * 100).toFixed(2)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="card p-6 mb-8">
+        <h2 className="text-xl font-bold mb-4">
+          {best.model} — Confusion Matrix
+        </h2>
+
+        <p className="text-sm text-slate-500 mb-4">
+          Actual outcomes are rows; predicted outcomes are columns.
+        </p>
+
+        <div className="grid grid-cols-3 gap-2 max-w-lg text-center">
+          <div></div>
+          <div className="font-semibold text-sm">Predicted Closed</div>
+          <div className="font-semibold text-sm">Predicted Acquired</div>
+
+          <div className="font-semibold text-sm self-center">
+            Actual Closed
+          </div>
+          <div className="bg-slate-100 rounded-xl p-5 text-2xl font-black">
+            {best.confusion_matrix[0][0]}
+          </div>
+          <div className="bg-slate-100 rounded-xl p-5 text-2xl font-black">
+            {best.confusion_matrix[0][1]}
+          </div>
+
+          <div className="font-semibold text-sm self-center">
+            Actual Acquired
+          </div>
+          <div className="bg-slate-100 rounded-xl p-5 text-2xl font-black">
+            {best.confusion_matrix[1][0]}
+          </div>
+          <div className="bg-slate-100 rounded-xl p-5 text-2xl font-black">
+            {best.confusion_matrix[1][1]}
+          </div>
+        </div>
+      </div>
+
+      <div className="card p-6 mb-8">
+        <h2 className="text-xl font-bold mb-3">Dataset Information</h2>
+        <p className="text-sm text-slate-600">
+          Target: {results.target} | Evaluation: {results.evaluation}
+        </p>
+        <p className="text-sm text-slate-600 mt-2">
+          Outcome mapping: Closed = 0, Acquired = 1
+        </p>
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+        <h2 className="font-bold text-amber-900 mb-3">
+          Important Research Limitations
+        </h2>
+        <ul className="list-disc pl-5 space-y-2 text-sm text-amber-900">
+          {results.limitations.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+    </div>
+  );
+}
+
 function Dashboard(){const [runs,setRuns]=useState([]);useEffect(()=>{api.get('/api/runs').then(r=>setRuns(r.data)).catch(()=>{})},[]);return <div className="max-w-7xl mx-auto px-5 py-10"><div className="flex justify-between items-end mb-8"><div><p className="text-violet-600 font-semibold">Workspace</p><h1 className="text-3xl font-black">Dashboard</h1></div><Link to="/new" className="gradient text-white px-4 py-2.5 rounded-xl flex gap-2 items-center"><Plus size={18}/>New Analysis</Link></div><div className="grid md:grid-cols-3 gap-5 mb-8">{[['Analyses',runs.length],['Completed',runs.filter(x=>x.status==='completed').length],['In progress',runs.filter(x=>!['completed','failed'].includes(x.status)).length]].map(([a,b])=><div className="card p-5" key={a}><div className="text-slate-500 text-sm">{a}</div><div className="text-3xl font-black mt-2">{b}</div></div>)}</div><div className="card p-6"><h2 className="font-bold text-lg mb-4">Recent analyses</h2>{runs.slice(0,6).map(r=><Link to={`/analysis/${r.run_id}`} className="flex items-center justify-between py-4 border-b last:border-0" key={r.run_id}><div><div className="font-semibold line-clamp-1">{r.startup_idea}</div><div className="text-xs text-slate-500 mt-1">{new Date(r.created_at).toLocaleString()}</div></div><Status status={r.status}/></Link>)}{!runs.length&&<div className="text-slate-500 py-8 text-center">No analyses yet. Create your first business plan.</div>}</div></div>}
 function Status({status}){const done=status==='completed';const fail=status==='failed';return <span className={`text-xs px-2.5 py-1 rounded-full ${done?'bg-emerald-50 text-emerald-700':fail?'bg-red-50 text-red-700':'bg-amber-50 text-amber-700'}`}>{status.replaceAll('_',' ')}</span>}
 function NewAnalysis(){const nav=useNavigate();const [idea,setIdea]=useState('AI-powered platform that helps college students find affordable healthy meals near their campus.');const [err,setErr]=useState('');async function submit(){try{const r=await api.post('/api/run',{startup_idea:idea});nav(`/analysis/${r.data.run_id}`)}catch(e){setErr(e.response?.data?.detail||'Could not start analysis')}}return <div className="max-w-4xl mx-auto px-5 py-12"><p className="text-violet-600 font-semibold">New analysis</p><h1 className="text-4xl font-black mt-1">Describe your startup idea</h1><p className="text-slate-500 mt-2">The core workflow works with only the startup idea.</p><textarea className="w-full min-h-72 border rounded-2xl p-5 mt-8 focus:outline-none focus:ring-2 focus:ring-violet-200" value={idea} onChange={e=>setIdea(e.target.value)} placeholder="Example: I want to build..."/><div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm mt-4 text-amber-800">AI-generated business analysis may contain estimates and should be verified before making real financial or business decisions.</div>{err&&<div className="text-red-600 mt-3">{err}</div>}<button onClick={submit} disabled={idea.trim().length<20} className="gradient text-white px-6 py-3 rounded-xl font-semibold mt-5 disabled:opacity-50">Generate Business Plan</button></div>}
@@ -542,5 +833,21 @@ function Auth({register=false}){
   );
 }
 
-function App(){return <Layout><Routes><Route path="/" element={<Landing/>}/><Route path="/login" element={<Auth/>}/><Route path="/register" element={<Auth register/>}/><Route path="/dashboard" element={<Dashboard/>}/><Route path="/new" element={<NewAnalysis/>}/><Route path="/analysis/:id" element={<Analysis/>}/><Route path="/history" element={<History/>}/><Route path="/profile" element={<Profile/>}/></Routes></Layout>}
+function App(){
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Landing/>}/>
+        <Route path="/login" element={<Auth/>}/>
+        <Route path="/register" element={<Auth register/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/new" element={<NewAnalysis/>}/>
+        <Route path="/ml-performance" element={<MLPerformance/>}/>
+        <Route path="/analysis/:id" element={<Analysis/>}/>
+        <Route path="/history" element={<History/>}/>
+        <Route path="/profile" element={<Profile/>}/>
+      </Routes>
+    </Layout>
+  );
+}
 createRoot(document.getElementById('root')).render(<BrowserRouter><App/></BrowserRouter>)

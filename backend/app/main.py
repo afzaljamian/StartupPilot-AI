@@ -5,11 +5,15 @@ import redis.asyncio as aioredis
 from .config import settings
 from jose import jwt, JWTError
 from .database.mongodb import init_db
-from .api import auth,startup,reports,users
+from .api import auth,startup,reports,users,ml
 
 app=FastAPI(title='StartupPilot AI API',version='1.0.0',description='Multi-agent startup business planning API')
 app.add_middleware(CORSMiddleware,allow_origins=settings.cors_list,allow_credentials=True,allow_methods=['*'],allow_headers=['*'])
-app.include_router(auth.router); app.include_router(startup.router); app.include_router(reports.router); app.include_router(users.router)
+app.include_router(auth.router)
+app.include_router(startup.router)
+app.include_router(reports.router)
+app.include_router(users.router)
+app.include_router(ml.router)
 
 @app.on_event('startup')
 async def startup_event():

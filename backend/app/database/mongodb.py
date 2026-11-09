@@ -68,3 +68,72 @@ async def save_report(run_id: str, report: dict):
 async def get_report(run_id: str):
     doc = await reports.find_one({'run_id': run_id}, {'_id': 0})
     return doc
+
+    
+async def get_run_analytics(user_id: str):
+    query = {'user_id': oid(user_id)}
+
+    running_statuses = [
+        'research_running',
+        'marketing_running',
+        'marketing_completed',
+        'finance_running',
+        'finance_completed',
+        'product_running',
+        'product_completed',
+        'validation_running',
+        'validation_completed',
+    ]
+
+    total = await runs.count_documents(query)
+
+    completed = await runs.count_documents({
+        **query,
+        'status': 'completed'
+    })
+
+    failed = await runs.count_documents({
+        **query,
+        'status': 'failed'
+    })
+
+    queued = await runs.count_documents({
+        **query,
+        'status': 'queued'
+    })
+
+    running = await runs.count_documents({
+        **query,
+        'status': {'$in': running_statuses}
+    })
+
+    cursor = runs.find(
+        query,
+        {
+            '_id': 1,
+            'startup_idea': 1,
+            'status': 1,
+            'created_at': 1,
+            'completed_at': 1
+        }
+    ).sort('created_at', -1).limit(5)
+
+    recent = []
+
+    async for doc in cursor:
+        recent.append({
+            'run_id': str(doc['_id']),
+            'startup_idea': doc.get('startup_idea', ''),
+            'status': doc.get('status', 'unknown'),
+            'created_at': doc.get('created_at'),
+            'completed_at': doc.get('completed_at')
+        })
+
+    return {
+        'total': total,
+        'completed': completed,
+        'failed': failed,
+        'running': running,
+        'queued': queued,
+        'recent': recent
+    }

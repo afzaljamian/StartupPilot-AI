@@ -115,7 +115,37 @@ CRITICAL JSON SHAPE RULES:
 
 Separate facts, estimates and assumptions. Unsupported statistics must say Data unavailable — requires verification.''',expected_output='Valid MarketingOutput JSON',agent=marketing)
     t2=Task(description=f'''Using the original idea and the completed Marketing task, build the financial plan. Marketing context is mandatory. Return ONLY valid JSON matching: {FinanceOutput.model_json_schema()}. Include explicit calculation inputs. Do not invent statistics.''',expected_output='Valid FinanceOutput JSON',agent=finance,context=[t1])
-    t3=Task(description=f'''Using the original idea plus Marketing and Finance outputs, create the product requirements document. Return ONLY valid JSON matching: {ProductOutput.model_json_schema()}. Include at least five user stories and MoSCoW priorities.''',expected_output='Valid ProductOutput JSON',agent=product,context=[t1,t2])
+    
+    t3=Task(description=f'''Using the original idea plus Marketing and Finance outputs, create the product requirements document.
+
+Return ONLY valid JSON matching this schema:
+{ProductOutput.model_json_schema()}
+
+CRITICAL JSON SHAPE RULES:
+- mvp_features MUST be an ARRAY OF OBJECTS, NOT an array of strings.
+- Each MVP feature object must contain a feature name, description, priority and business value.
+- Example:
+  "mvp_features": [
+    {{
+      "feature": "AI Meal Planner",
+      "description": "Creates personalized meal plans",
+      "priority": "Must Have",
+      "business_value": "Improves student engagement"
+    }}
+  ]
+- roadmap MUST be an array of exactly 3 objects.
+- kpi_targets MUST be an array of objects.
+- target_users, product_goals, user_stories, technology_stack, product_risks, future_features and assumptions MUST be arrays of strings.
+- feature_prioritization MUST be a JSON object with MoSCoW categories.
+- Never replace an object with a plain string.
+- Follow the exact field names and types in the supplied schema.
+- Include at least five user stories.
+- Do not include Markdown or code fences.
+- Return valid JSON only.''',
+    expected_output='Valid ProductOutput JSON with structured MVP feature objects',
+    agent=product,
+    context=[t1,t2])
+
     t4=Task(description=f'''Audit the Marketing, Finance and Product outputs. Do not create a new business plan. Return ONLY valid JSON matching: {ValidationOutput.model_json_schema()}. Flag unsupported claims as VERIFY and find contradictions.''',expected_output='Valid ValidationOutput JSON',agent=validator,context=[t1,t2,t3])
     crew=Crew(agents=[coordinator,marketing,finance,product,validator],tasks=[t1,t2,t3,t4],process=Process.sequential,verbose=False)
     last_exc = None

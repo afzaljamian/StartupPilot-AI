@@ -1,0 +1,133 @@
+{
+    "dataset": "Historical Startup Dataset",
+    "total_records": 923,
+    "training_records": 692,
+    "testing_records": 231,
+    "target": "status",
+    "target_mapping": {
+        "closed": 0,
+        "acquired": 1
+    },
+    "excluded_columns": [
+        "status",
+        "labels",
+        "closed_at",
+        "last_funding_at",
+        "last_funding_at",
+        "age_last_funding_year",
+        "age_last_milestone_year",
+        "Unnamed: 0",
+        "Unnamed: 6",
+        "id",
+        "object_id",
+        "name",
+        "zip_code",
+        "city",
+        "state_code",
+        "state_code.1",
+        "latitude",
+        "longitude",
+        "founded_at",
+        "first_funding_at",
+        "is_top500"
+    ],
+    "feature_columns": [
+        "age_first_funding_year",
+        "age_first_milestone_year",
+        "relationships",
+        "funding_rounds",
+        "funding_total_usd",
+        "milestones",
+        "is_CA",
+        "is_NY",
+        "is_MA",
+        "is_TX",
+        "is_otherstate",
+        "category_code",
+        "is_software",
+        "is_web",
+        "is_mobile",
+        "is_enterprise",
+        "is_advertising",
+        "is_gamesvideo",
+        "is_ecommerce",
+        "is_biotech",
+        "is_consulting",
+        "is_othercategory",
+        "has_VC",
+        "has_angel",
+        "has_roundA",
+        "has_roundB",
+        "has_roundC",
+        "has_roundD",
+        "avg_participants"
+    ],
+    "evaluation": "Stratified 75/25 train-test split",
+    "random_state": 42,
+    "best_model": "Random Forest",
+    "models": [
+        {
+            "model": "Logistic Regression",
+            "accuracy": 0.671,
+            "balanced_accuracy": 0.6846,
+            "precision": 0.812,
+            "recall": 0.6376,
+            "f1_score": 0.7143,
+            "roc_auc": 0.7659,
+            "confusion_matrix": [
+                [
+                    60,
+                    22
+                ],
+                [
+                    54,
+                    95
+                ]
+            ]
+        },
+        {
+            "model": "Random Forest",
+            "accuracy": 0.7879,
+            "balanced_accuracy": 0.7478,
+            "precision": 0.8049,
+            "recall": 0.8859,
+            "f1_score": 0.8435,
+            "roc_auc": 0.8124,
+            "confusion_matrix": [
+                [
+                    50,
+                    32
+                ],
+                [
+                    17,
+                    132
+                ]
+            ]
+        },
+        {
+            "model": "Extra Trees",
+            "accuracy": 0.7013,
+            "balanced_accuracy": 0.6615,
+            "precision": 0.7532,
+            "recall": 0.7987,
+            "f1_score": 0.7752,
+            "roc_auc": 0.7324,
+            "confusion_matrix": [
+                [
+                    43,
+                    39
+                ],
+                [
+                    30,
+                    119
+                ]
+            ]
+        }
+    ],
+    "limitations": [
+        "Historical outcome classification, not guaranteed startup success prediction.",
+        "Results depend on the dataset and its feature availability.",
+        "Retrospective features may not be available when a new startup idea is first evaluated.",
+        "Single train-test split; cross-validation is needed for stronger evidence."
+    ]
+}

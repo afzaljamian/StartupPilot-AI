@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from ..schemas.models import RunCreate, RunOut
-from ..database.mongodb import create_run,get_run,list_runs,delete_run
+from ..database.mongodb import create_run, get_run, list_runs, delete_run, get_run_analytics
+
 from ..utils.auth import get_current_user
 from ..tasks.celery_tasks import run_analysis
 router=APIRouter(prefix='/api',tags=['startup'])
@@ -17,6 +18,9 @@ async def get_one(run_id,user=Depends(get_current_user)):
     return RunOut(**r)
 @router.get('/runs')
 async def get_all(user=Depends(get_current_user)): return await list_runs(user['id'])
+@router.get('/analytics')
+async def get_analytics(user=Depends(get_current_user)):
+    return await get_run_analytics(user['id'])
 @router.delete('/run/{run_id}')
 async def remove(run_id,user=Depends(get_current_user)):
     result=await delete_run(run_id,user['id'])
